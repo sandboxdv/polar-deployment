@@ -56,6 +56,7 @@ services:
 
   edge-service:
     depends_on:
+      - polar-keycloak
       - polar-redis
     image: "edge-service"
     container_name: "edge-service"
@@ -70,6 +71,7 @@ services:
       - ORDER_SERVICE_URL=http://order-service:9002
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
       - SPRING_REDIS_HOST=polar-redis
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/PolarBookshop
 
   config-service:
     image: "config-service"
@@ -111,3 +113,15 @@ services:
       - "15672:15672"
     volumes:
       - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+
+  polar-keycloak:
+    image: quay.io/keycloak/keycloak:26.6
+    container_name: "polar-keycloak"
+    command: start-dev --import-realm
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    environment:
+      - KEYCLOAK_ADMIN=user
+      - KEYCLOAK_ADMIN_PASSWORD=password
+    ports:
+      - "8080:8080"
