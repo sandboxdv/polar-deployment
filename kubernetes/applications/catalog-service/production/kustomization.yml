@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - github.com/sandboxdv/catalog-service/k8s?ref=2469563dd43847c98ee9b57ec82527b3fa3fef1c
+
+patches:
+  - path: patch-env.yml
+  - path: patch-resources.yml
+  - path: patch-volumes.yml
+
+configMapGenerator:
+  - behavior: merge
+    files:
+      - application-prod.yml
+    name: catalog-config
+
+images:
+  - name: catalog-service
+    newName: ghcr.io/sandboxdv/catalog-service
+    newTag: 2469563dd43847c98ee9b57ec82527b3fa3fef1c
+
+replicas:
+  - name: catalog-service
+    count: 2
