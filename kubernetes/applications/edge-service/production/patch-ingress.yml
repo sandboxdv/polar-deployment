@@ -2,9 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: polar-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location ~* "^/actuator" {
-        deny all;
-        return 403;
-      }
+
+# To block external access to Spring Boot Actuator endpoints, deploy ingress-nginx
+# with allow-snippet-annotations: "true" and uncomment the annotation below.
+#
+#  annotations:
+#    nginx.ingress.kubernetes.io/server-snippet: |
+#      location ~* "^/actuator" {
+#        deny all;
+#        return 403;
+#      }
