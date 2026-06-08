@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 echo "\n🗝️  Keycloak deployment started.\n"
 
